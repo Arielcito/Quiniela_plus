@@ -38,6 +38,8 @@ int main()
     int numerosSorteo[20];
     JugadorPtr jugador = RegistrarJugador();
     CartonPtr carton;
+    bool sorteoRealizado = false;
+    bool cartonComprado = false;
     while (true)
     {
         int opcion;
@@ -62,8 +64,15 @@ int main()
                 printf("\n**Opciones:**\n");
                 printf("1. Comprar cartón automatico\n");
                 printf("2. Comprar carton seleccionando numeros\n");
-                printf("3. Realizar sorteo\n");
-                printf("4. Verificar carton\n");
+                if (cartonComprado)
+                {
+                    printf("3. Realizar sorteo\n");
+                }
+                if  (sorteoRealizado)
+                {
+                    printf("4. Verificar cartón\n");
+                }
+
                 printf("5. Salir\n\n");
                 printf("Elige una opción: ");
                 scanf("%d", &opcionJuego);
@@ -72,12 +81,15 @@ int main()
                 switch (opcionJuego)
                 {
                 case 1:
+                    cartonComprado = true;
                     carton = ComprarCartonAutomatico(jugador);
                     break;
                 case 2:
+                    cartonComprado = true;
                     carton = ComprarCartonSeleccionando(jugador);
                     break;
                 case 3:
+                     sorteoRealizado = true;
                     RealizarSorteo(numerosSorteo);
                     break;
                 case 4:
@@ -229,18 +241,22 @@ void generarNumerosAleatorios(int vector[], int tamanio)
         vector[i] = -1;
     }
     int contador = 0;
-    while(contador < tamanio){
+    while(contador < tamanio)
+    {
         bool repetido = false;
         int numeroAleatorio = rand() % 100;
 
-        for (int j=0;j < contador; j++){
-            if(vector[j] == numeroAleatorio){
+        for (int j=0; j < contador; j++)
+        {
+            if(vector[j] == numeroAleatorio)
+            {
                 repetido = true;
                 break;
             }
         }
 
-        if(!repetido){
+        if(!repetido)
+        {
             vector[contador] = numeroAleatorio;
             contador++;
         }
