@@ -166,13 +166,54 @@ void RealizarSorteo(int numerosSorteo[]){
 }
 
 void VerificarCarton(int numerosSorteo[20],CartonPtr carton){
-    int aciertos = busquedaBinaria(carton->numeros, numerosSorteo);
-    printf("La cantidad de aciertos es de: %d", aciertos);
+    int posicionAciertos[8];
+    ordenarBurbuja(numerosSorteo, 20);
+    int aciertos = busquedaBinaria(carton->numeros, numerosSorteo,posicionAciertos);
+     printf("\n**Resultado del sorteo**\n");
+
+      printf("Aciertos: %d\n", aciertos);
+
+        printf("Carton final: ");
+       for (int i = 0; i < 8; i++) {
+           bool encontrado = false;
+          for(int j=0;j<aciertos;j++){
+
+              if(carton->numeros[i] == posicionAciertos[j]){
+                printf("[%d] ", carton->numeros[i]);
+                encontrado = true;
+                break;
+              }
+            }
+            if(!encontrado){
+              printf("%d ", carton->numeros[i]);
+            }
+        }
+        printf("\n");
+
+      int premio = determinarPremio(aciertos);
+      if (premio > 0) {
+        printf("¡Felicidades! Usted ha ganado $%d\n", premio);
+      } else {
+        printf("Lo sentimos, no ha ganado ningún premio en este sorteo.\n");
+      }
+}
+int determinarPremio(int aciertos) {
+  switch (aciertos) {
+    case 8:
+      return 11000000;
+    case 7:
+      return 20000;
+    case 6:
+      return 500;
+    case 5:
+      return 50;
+    default:
+      return 0;
+  }
 }
 
-int busquedaBinaria(int carton[], int numerosSorteo[]) {
+int busquedaBinaria(int carton[], int numerosSorteo[], int posicionAciertos[]) {
   int aciertos = 0;
-    ordenarBurbuja(numerosSorteo, 20);
 
   // Recorrer los números del sorteo
   for (int i = 0; i < 8; i++) {
@@ -183,9 +224,9 @@ int busquedaBinaria(int carton[], int numerosSorteo[]) {
     int fin = 19;
     while (inicio <= fin) {
       int mitad = (inicio + fin) / 2;
-        printf("[%d]:%d\n",numeroCarton,numerosSorteo[mitad]);
-      if (numerosSorteo[mitad] == numeroCarton) {
 
+      if (numerosSorteo[mitad] == numeroCarton) {
+        posicionAciertos[aciertos] = numeroCarton;
         aciertos++;
         break;
       } else if (numeroCarton > numerosSorteo[mitad]) {
