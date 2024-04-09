@@ -5,8 +5,10 @@
 
 typedef struct{
     char fecha_de_emision[30];
+    //char fecha_juego[30];
     int numeros[8];
     char direccion_agencia[100];
+
     int precio;
     JugadorPtr jugador;
 } Carton;

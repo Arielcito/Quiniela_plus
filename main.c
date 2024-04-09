@@ -11,6 +11,7 @@ Generar un bucle que te diga cuantas veces tenes que jugar con el mismo cartón 
 #include "jugador.h"
 #include <stdbool.h>
 #include "carton.h"
+#include <time.h>
 
 CartonPtr ComprarCartonAutomatico(JugadorPtr jugador);
 CartonPtr ComprarCartonSeleccionando(JugadorPtr jugador);
@@ -19,6 +20,17 @@ void RealizarSorteo(int numerosSorteo[]);
 void generarNumerosAleatorios(int vector[], int tamanio);
 void VerificarCarton(int numerosSorteo[20],CartonPtr carton);
 int calcularJugadasParaGanar8Aciertos(CartonPtr carton);
+char *obtenerFechaHoraActual();
+
+char *obtenerFechaHoraActual() {
+  time_t tiempoActual = time(NULL);
+  struct tm *fechaHora = localtime(&tiempoActual);
+
+  char buffer[20];
+  strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", fechaHora);
+
+  return strdup(buffer);
+}
 
 int main()
 {
@@ -116,6 +128,8 @@ CartonPtr ComprarCartonAutomatico(JugadorPtr jugador)
 {
     int numeros[8] = {0};
 
+     char *fechaHoraActual  = obtenerFechaHoraActual();
+
     generarNumerosAleatorios(numeros, 8);
 
     printf("Tus numeros son:");
@@ -125,34 +139,39 @@ CartonPtr ComprarCartonAutomatico(JugadorPtr jugador)
     }
     printf("\n");
 
-    CartonPtr carton = CrearCarton(numeros,jugador,"Calle Mayor 123", "9/4/2024", 70);
-
+    CartonPtr carton = CrearCarton(numeros,jugador,"Siempreviva 123", fechaHoraActual, 70);
+    printf("Fecha de emision: %s", GetFechaEmision(fechaHoraActual));
     return carton;
 }
 
-CartonPtr ComprarCartonSeleccionando(JugadorPtr jugador)
-{
-    int numeros[8] = {0};
+CartonPtr ComprarCartonSeleccionando(JugadorPtr jugador) {
+  int numeros[8] = {0};
 
-    printf("Ingrese los numeros para su carton:\n");
-    for (int i = 0; i < 8; i++)
-    {
-        int numero;
-        scanf("%d",&numero);
+  printf("Ingrese los números para su cartón:\n");
+  for (int i = 0; i < 8; i++) {
+    int numero;
 
-        numeros[i] = numero;
-    }
-    printf("\n");
+    // Bucle para validar que el número no sea mayor a 99
+    do {
+      scanf("%d", &numero);
+      if (numero > 99) {
+        printf("El número debe ser menor o igual a 99. Intente nuevamente: ");
+      }
+    } while (numero > 99);
 
-    printf("Tus numeros son:");
-    for (int i = 0; i < 8; i++)
-    {
-        printf(" %d ", numeros[i]);
-    }
-    printf("\n");
-    CartonPtr carton = CrearCarton(numeros,jugador,"Calle Mayor 123", "9/4/2024", 70);
+    numeros[i] = numero;
+  }
+  printf("\n");
 
-    return carton;
+  printf("Tus números son:");
+  for (int i = 0; i < 8; i++) {
+    printf(" %d ", numeros[i]);
+  }
+  printf("\n");
+
+  CartonPtr carton = CrearCarton(numeros, jugador, "Calle Mayor 123", "9/4/2024", 70);
+
+  return carton;
 }
 
 void generarNumerosAleatorios(int vector[], int tamanio)
@@ -225,10 +244,13 @@ void VerificarCarton(int numerosSorteo[20],CartonPtr carton)
         printf("1- SI\n");
         printf("2- NO\n");
         scanf("%d",&eleccion);
-        if(eleccion == 1){
+        if(eleccion == 1)
+        {
             int intentos = calcularJugadasParaGanar8Aciertos(carton);
             printf("Para ganar el mayor premio con este carton necesitaria %d intentos para lograrlo",intentos);
-        }else{
+        }
+        else
+        {
             return;
         }
     }
@@ -244,7 +266,7 @@ int calcularJugadasParaGanar8Aciertos(CartonPtr carton)
         intentos++;
         RealizarSorteo(numerosSorteo);
         aciertos = busquedaBinaria(carton->numeros, numerosSorteo,posicionAciertos);
-
+        printf("%d",intentos);
     }
     while(aciertos != 8);
     return intentos;
@@ -328,6 +350,20 @@ int busquedaBinaria(int carton[], int numerosSorteo[], int posicionAciertos[])
 
 void ordenarBurbuja(int array[], int longitud)
 {
+
+int calcularFechaDeJuego(CartonPtr carton){
+
+}
+
+char *obtenerFechaHoraActual() {
+  time_t tiempoActual = time(NULL);
+  struct tm *fechaHora = localtime(&tiempoActual);
+
+  char buffer[20];
+  strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", fechaHora);
+
+  return strdup(buffer);
+}
     for (int i = 0; i < longitud - 1; i++)
     {
         for (int j = 0; j < longitud - i - 1; j++)
