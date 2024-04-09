@@ -1,0 +1,34 @@
+# depslib dependency file v1.0
+1712672286 source:c:\users\ariel.serato\desktop\programacion\quiniela_plus\fecha.c
+	"fecha.h"
+
+1712672146 c:\users\ariel.serato\desktop\programacion\quiniela_plus\fecha.h
+
+1712674226 source:c:\users\ariel.serato\desktop\programacion\quiniela_plus\jugador.c
+	"jugador.h"
+	<string.h>
+
+1712671880 c:\users\ariel.serato\desktop\programacion\quiniela_plus\jugador.h
+
+1712676247 source:c:\users\ariel.serato\desktop\programacion\quiniela_plus\carton.c
+	"carton.h"
+	<string.h>
+	<stdio.h>
+
+1712676247 c:\users\ariel.serato\desktop\programacion\quiniela_plus\carton.h
+	"jugador.h"
+
+1712677199 source:c:\users\ariel.serato\desktop\programacion\quiniela_plus\main.c
+	<stdio.h>
+	<stdlib.h>
+	"jugador.h"
+	<stdbool.h>
+	"carton.h"
+
+1712673903 c:\users\ariel.serato\desktop\programacion\quiniela_plus\jugador.c
+	"jugador.h"
+	<string.h>
+
+1712673274 c:\users\ariel.serato\desktop\programacion\quiniela_plus\carton.c
+	"carton.h"
+
