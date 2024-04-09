@@ -22,14 +22,15 @@ void VerificarCarton(int numerosSorteo[20],CartonPtr carton);
 int calcularJugadasParaGanar8Aciertos(CartonPtr carton);
 char *obtenerFechaHoraActual();
 
-char *obtenerFechaHoraActual() {
-  time_t tiempoActual = time(NULL);
-  struct tm *fechaHora = localtime(&tiempoActual);
+char *obtenerFechaHoraActual()
+{
+    time_t tiempoActual = time(NULL);
+    struct tm *fechaHora = localtime(&tiempoActual);
 
-  char buffer[20];
-  strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", fechaHora);
+    char buffer[20];
+    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", fechaHora);
 
-  return strdup(buffer);
+    return strdup(buffer);
 }
 
 int main()
@@ -111,13 +112,38 @@ int main()
 JugadorPtr RegistrarJugador()
 {
     char nombre[50];
-    int dni;
+    char dniStr[20];
+    int dni = 0;
+    int esNumerico = 1;
+
 
     printf("1. Ingrese su nombre\n");
-    scanf("%s",nombre);
+    scanf("%49s", nombre);
 
-    printf("2. Ingrese su DNI\n");
-    scanf("%d",&dni);
+
+    do
+    {
+        printf("Ingrese su DNI (solo numeros):\n");
+        scanf("%19s", dniStr);
+        esNumerico = 1;
+        for (int i = 0; i < strlen(dniStr); i++)
+        {
+            if (!isdigit(dniStr[i]))
+            {
+                esNumerico = 0;
+                printf("Error: El DNI debe contener solo numeros.\n");
+                break;
+            }
+        }
+
+        if (esNumerico)
+        {
+            dni = atoi(dniStr);
+        }
+
+    }
+    while (!esNumerico);
+
 
     JugadorPtr jugador = crearJugador(nombre,dni);
 
@@ -128,7 +154,7 @@ CartonPtr ComprarCartonAutomatico(JugadorPtr jugador)
 {
     int numeros[8] = {0};
 
-     char *fechaHoraActual  = obtenerFechaHoraActual();
+    char *fechaHoraActual  = obtenerFechaHoraActual();
 
     generarNumerosAleatorios(numeros, 8);
 
@@ -140,50 +166,86 @@ CartonPtr ComprarCartonAutomatico(JugadorPtr jugador)
     printf("\n");
 
     CartonPtr carton = CrearCarton(numeros,jugador,"Siempreviva 123", fechaHoraActual, 70);
-    printf("Fecha de emision: %s", GetFechaEmision(fechaHoraActual));
+    printf("Fecha de emision: %s", GetFechaEmision(carton));
     return carton;
 }
 
-CartonPtr ComprarCartonSeleccionando(JugadorPtr jugador) {
-  int numeros[8] = {0};
+CartonPtr ComprarCartonSeleccionando(JugadorPtr jugador)
+{
+    int numeros[8] = {0};
 
-  printf("Ingrese los números para su cartón:\n");
-  for (int i = 0; i < 8; i++) {
-    int numero;
+    printf("Ingrese los números para su cartón, deben ser únicos y estar entre 0 y 99:\n");
 
-    // Bucle para validar que el número no sea mayor a 99
-    do {
-      scanf("%d", &numero);
-      if (numero > 99) {
-        printf("El número debe ser menor o igual a 99. Intente nuevamente: ");
-      }
-    } while (numero > 99);
+    for (int i = 0; i < 8; )
+    {
+        int numero;
+        bool numeroRepetido = false;
 
-    numeros[i] = numero;
-  }
-  printf("\n");
+        printf("Número %d: ", i + 1);
+        scanf("%d", &numero);
 
-  printf("Tus números son:");
-  for (int i = 0; i < 8; i++) {
-    printf(" %d ", numeros[i]);
-  }
-  printf("\n");
+        if (numero < 0 || numero > 99)
+        {
+            printf("El número debe ser entre 0 y 99. Intente nuevamente:\n");
+            continue;
+        }
 
-  CartonPtr carton = CrearCarton(numeros, jugador, "Calle Mayor 123", "9/4/2024", 70);
+        for (int j = 0; j < i; j++)
+        {
+            if (numeros[j] == numero)
+            {
+                printf("Número repetido, ingrese un número diferente.\n");
+                numeroRepetido = true;
+                break;
+            }
+        }
 
-  return carton;
+        if (!numeroRepetido)
+        {
+            numeros[i] = numero;
+            i++;
+        }
+    }
+
+    printf("\n");
+
+    printf("Tus números son:");
+    for (int i = 0; i < 8; i++)
+    {
+        printf(" %d ", numeros[i]);
+    }
+    printf("\n");
+
+    char *fechaHoraActual  = obtenerFechaHoraActual();
+    CartonPtr carton = CrearCarton(numeros, jugador, "Calle Mayor 123", fechaHoraActual, 70);
+    printf("Fecha de emision: %s", GetFechaEmision(carton));
+    return carton;
 }
 
 void generarNumerosAleatorios(int vector[], int tamanio)
 {
-    // Inicializar la semilla del generador aleatorio
-    srand(time(NULL));
-
-    // Generar 8 números aleatorios y cargarlos en el vector
     for (int i = 0; i < tamanio; i++)
     {
-        vector[i] = rand() % 100;
+        vector[i] = -1;
     }
+    int contador = 0;
+    while(contador < tamanio){
+        bool repetido = false;
+        int numeroAleatorio = rand() % 100;
+
+        for (int j=0;j < contador; j++){
+            if(vector[j] == numeroAleatorio){
+                repetido = true;
+                break;
+            }
+        }
+
+        if(!repetido){
+            vector[contador] = numeroAleatorio;
+            contador++;
+        }
+    }
+
 }
 
 void RealizarSorteo(int numerosSorteo[])
@@ -351,19 +413,21 @@ int busquedaBinaria(int carton[], int numerosSorteo[], int posicionAciertos[])
 void ordenarBurbuja(int array[], int longitud)
 {
 
-int calcularFechaDeJuego(CartonPtr carton){
+    int calcularFechaDeJuego(CartonPtr carton)
+    {
 
-}
+    }
 
-char *obtenerFechaHoraActual() {
-  time_t tiempoActual = time(NULL);
-  struct tm *fechaHora = localtime(&tiempoActual);
+    char *obtenerFechaHoraActual()
+    {
+        time_t tiempoActual = time(NULL);
+        struct tm *fechaHora = localtime(&tiempoActual);
 
-  char buffer[20];
-  strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", fechaHora);
+        char buffer[20];
+        strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", fechaHora);
 
-  return strdup(buffer);
-}
+        return strdup(buffer);
+    }
     for (int i = 0; i < longitud - 1; i++)
     {
         for (int j = 0; j < longitud - i - 1; j++)
