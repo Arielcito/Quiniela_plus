@@ -10,15 +10,15 @@
 
 1712671880 c:\users\ariel.serato\desktop\programacion\quiniela_plus\jugador.h
 
-1712676247 source:c:\users\ariel.serato\desktop\programacion\quiniela_plus\carton.c
+1712681928 source:c:\users\ariel.serato\desktop\programacion\quiniela_plus\carton.c
 	"carton.h"
 	<string.h>
 	<stdio.h>
 
-1712676247 c:\users\ariel.serato\desktop\programacion\quiniela_plus\carton.h
+1712681944 c:\users\ariel.serato\desktop\programacion\quiniela_plus\carton.h
 	"jugador.h"
 
-1712679561 source:c:\users\ariel.serato\desktop\programacion\quiniela_plus\main.c
+1712681903 source:c:\users\ariel.serato\desktop\programacion\quiniela_plus\main.c
 	<stdio.h>
 	<stdlib.h>
 	"jugador.h"

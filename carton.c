@@ -36,6 +36,10 @@ int GetPrecio(CartonPtr carton) {
   return carton->precio;
 }
 
+JugadorPtr GetJugador(CartonPtr carton){
+    return carton->jugador;
+}
+
 void leerCarton(const Carton *carton) {
   // Imprimir encabezado
   printf("\n**Cartón de Quiniela**\n");

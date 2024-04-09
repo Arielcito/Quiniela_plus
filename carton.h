@@ -18,7 +18,7 @@ void destruirCarton(char d,int p);
 
 int GetNumero(CartonPtr carton, int indice);
 char* GetFechaEmision(CartonPtr carton);
-char* GetFechaJuego(CartonPtr carton);
 char* GetDireccionAgencia(CartonPtr carton);
 int GetPrecio(CartonPtr carton);
+JugadorPtr GetJugador(CartonPtr carton);
 #endif // CARTON_H
